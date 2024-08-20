@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  #mongo db 
+  mongo_db:
+    image: mongo
+    container_name: mongo_db
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_db:/data/db
+  mongo_express:
+    image: mongo-express
+    container_name: mongo_express
+    restart: always
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo_db
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo_db
+      ME_CONFIG_MONGODB_PORT: 27017
+      # ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+volumes:
+  mongo_db:
