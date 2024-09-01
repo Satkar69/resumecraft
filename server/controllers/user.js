@@ -55,12 +55,11 @@ export const getUser = asyncHandler(async (req, res, next) => {
 
 export const deleteUser = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  const user = await deleteUserById(id);
-
+  await deleteUserById(id);
   res.status(200).json({
     status: "success",
     statusCode: 200,
-    user,
+    message: `user deleted successfully!!`,
   });
 });
 

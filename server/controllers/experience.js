@@ -5,23 +5,25 @@ import {
   deleteExpById,
   findExpById,
   updateExpById,
+  findExpsByUd,
+  updateExpByUd,
 } from "../services/experience.js";
 
 export const createExperience = asyncHandler(async (req, res, next) => {
   const data = req.body;
   const experience = await createExp(data);
-  return res.status(201).json({
+  res.status(201).json({
     status: "success",
-    statuscode: 200,
+    statusCode: 201,
     experience,
   });
 });
 
 export const getExperiences = asyncHandler(async (req, res, next) => {
   const experiences = await findAllExp();
-  return res.status(200).json({
+  res.status(200).json({
     status: "success",
-    statuscode: 200,
+    statusCode: 200,
     experiences,
   });
 });
@@ -29,7 +31,7 @@ export const getExperiences = asyncHandler(async (req, res, next) => {
 export const getExperience = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   const experience = await findExpById(id);
-  return res.status(200).json({
+  res.status(200).json({
     status: "success",
     statusCode: 200,
     experience,
@@ -38,11 +40,11 @@ export const getExperience = asyncHandler(async (req, res, next) => {
 
 export const deleteExperience = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  const experience = await deleteExpById(id);
-  return res.status(200).json({
+  await deleteExpById(id);
+  res.status(200).json({
     status: "success",
     statusCode: 200,
-    experience,
+    message: `experience deleted successfully!!`,
   });
 });
 
@@ -50,9 +52,34 @@ export const updateExperience = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   const data = req.body;
   const experience = await updateExpById(id, data);
-  return res.status(200).json({
+  res.status(200).json({
     status: "success",
     statusCode: 200,
     experience,
   });
 });
+
+export const getExperiencesByUserDetail = asyncHandler(
+  async (req, res, next) => {
+    const id = req.params.id;
+    const experiences = await findExpsByUd(id);
+    res.status(200).json({
+      status: "success",
+      statusCode: 200,
+      experiences,
+    });
+  }
+);
+
+export const updateExperienceByUserDetail = asyncHandler(
+  async (req, res, next) => {
+    const id = req.params.id;
+    const data = req.body;
+    const experience = await updateExpByUd(id, data);
+    res.status(200).json({
+      status: "success",
+      statusCode: 200,
+      experience,
+    });
+  }
+);

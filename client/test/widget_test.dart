@@ -9,11 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:resumecraft/main.dart';
+import 'package:resumecraft/pages/auth/login_page.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    // Provide a default home widget for testing
+    await tester.pumpWidget(const MyApp(defaultHome: LoginPage()));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

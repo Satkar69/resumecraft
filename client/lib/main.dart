@@ -1,53 +1,90 @@
 import 'package:flutter/material.dart';
 
-import 'package:resumecraft/pages/login_page.dart';
-import 'package:resumecraft/pages/profile_page.dart';
-import 'package:resumecraft/pages/register_page.dart';
-import 'package:resumecraft/services/shared_service.dart';
+import 'package:resumecraft/pages/profile/profile_section_page.dart';
+import 'package:resumecraft/pages/auth/login_page.dart';
+import 'package:resumecraft/pages/home/home_page.dart';
+import 'package:resumecraft/pages/profile_section/education/education_page.dart';
+import 'package:resumecraft/pages/profile_section/education/educations_page.dart';
+import 'package:resumecraft/pages/profile_section/experience/experience_page.dart';
+import 'package:resumecraft/pages/profile_section/experience/experiences_page.dart';
+import 'package:resumecraft/pages/profile_section/objective/objective_page.dart';
+import 'package:resumecraft/pages/profile_section/objective/objectives_page.dart';
+import 'package:resumecraft/pages/profile_section/personal_detail_page.dart';
+import 'package:resumecraft/pages/profile/profile_page.dart';
+import 'package:resumecraft/pages/auth/register_page.dart';
+import 'package:resumecraft/pages/profile_section/projects/project_page.dart';
+import 'package:resumecraft/pages/profile_section/projects/projects_page.dart';
+import 'package:resumecraft/pages/profile_section/skills/skill_page.dart';
+import 'package:resumecraft/pages/profile_section/skills/skills_page.dart';
+import 'package:resumecraft/pages/pdf_preview_page.dart';
+import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 
-Widget _defaultHome = const LoginPage();
+Widget _defaultHome = const LoginPage(); // Default to LoginPage initially
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  bool _result = await SharedService.isLoggedIn();
-  if (_result) {
-    _defaultHome = const ProfilePage();
+
+  // Check if the user is logged in
+  bool result = await UserSharedPrefs.isLoggedIn();
+
+  // Set default home to HomePage if the user is logged in
+  if (result) {
+    _defaultHome = const HomePage();
   }
-  runApp(const MyApp());
+
+  // Pass the _defaultHome widget to MyApp
+  runApp(MyApp(defaultHome: _defaultHome));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Widget defaultHome;
+  const MyApp({super.key, required this.defaultHome});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'RESUMECRAFT',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       routes: {
-        '/': (context) => _defaultHome,
+        // ================= default ===================
+        '/': (context) => defaultHome,
+
+        // ================= auth ===================
         '/login': (context) => const LoginPage(),
-        '/profile': (context) => const ProfilePage(),
-        '/register': (context) => const RegisterPage()
+        '/register': (context) => const RegisterPage(),
+
+        // ================= home ===================
+        '/home': (context) => const HomePage(),
+
+        // ================= profiles ===================
+        '/profiles': (context) => const ProfilePage(),
+
+        // ================= profile-sections ===================
+        '/profile-section': (context) => const ProfileSectionPage(),
+
+        // ================= create-section-detail ===================
+        '/personal-detail': (context) => const PersonalDetailPage(),
+
+        '/education': (context) => const EducationPage(),
+        '/educations': (context) => const EducationsPage(),
+
+        '/experience': (context) => const ExperiencePage(),
+        '/experiences': (context) => const ExperiencesPage(),
+
+        '/skill': (context) => const SkillPage(),
+        '/skills': (context) => const SkillssPage(),
+
+        '/project': (context) => const ProjectPage(),
+        '/projects': (context) => const ProjectsPage(),
+
+        '/objective': (context) => const ObjectivePage(),
+        '/objectives': (context) => const ObjectivesPage(),
+
+        '/resumes': (constext) => PDFPreviewPage()
       },
     );
   }

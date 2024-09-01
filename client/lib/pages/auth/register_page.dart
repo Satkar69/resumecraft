@@ -1,12 +1,13 @@
 // import 'package:flutter/gestures.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:resumecraft/utils/helpers/dialog_helper.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/register/register_request_model.dart';
-import 'package:resumecraft/services/api_service.dart';
+import 'package:resumecraft/api_services/user_api_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -166,35 +167,26 @@ class _RegisterPageState extends State<RegisterPage> {
                 RegisterRequestModel model = RegisterRequestModel(
                     username: username!, email: email!, password: password!);
                 try {
-                  final response = await APIService.register(model);
+                  final response = await UserAPIService.register(model);
+                  print(response);
                   setState(() {
                     isApicallProcess = false;
                   });
                   if (response.statusCode == 201) {
-                    // Assuming 200 is success
-                    FormHelper.showSimpleAlertDialog(context, Config.appName,
-                        "Registration successful!", "OK", () {
-                      Navigator.pop(context);
-                      Navigator.pushReplacementNamed(context, '/login');
-                    });
+                    // Assuming 201 is success
+                    DialogHelper.displayDialog(
+                        context, "Registration successful!",
+                        routeName: '/login');
                   } else {
-                    FormHelper.showSimpleAlertDialog(
-                        context,
-                        Config.appName,
-                        "Registration failed. Please try again.",
-                        "OK",
-                        () => Navigator.pop(context));
+                    DialogHelper.displayDialog(
+                        context, "Registration failed. Please try again.");
                   }
                 } catch (e) {
                   setState(() {
                     isApicallProcess = false;
                   });
-                  FormHelper.showSimpleAlertDialog(
-                      context,
-                      Config.appName,
-                      "An error occurred. Please try again.",
-                      "OK",
-                      () => Navigator.pop(context));
+                  DialogHelper.displayDialog(
+                      context, "An error occurred. Please try again.");
                 }
               }
             },
@@ -205,7 +197,38 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           SizedBox(
             height: 20,
-          )
+          ),
+          Center(
+            child: Text(
+              "OR",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.white),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: RichText(
+              text: TextSpan(
+                style: const TextStyle(color: Colors.grey, fontSize: 14.0),
+                children: <TextSpan>[
+                  TextSpan(text: "Already have an account?"),
+                  TextSpan(
+                      text: 'Login',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, "/login");
+                        }),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

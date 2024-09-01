@@ -4,10 +4,10 @@ import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/login/login_request_model.dart';
-import 'package:resumecraft/services/api_service.dart';
-import 'package:resumecraft/services/shared_service.dart';
+import 'package:resumecraft/api_services/user_api_service.dart';
+import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
+import 'package:resumecraft/utils/helpers/dialog_helper.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -94,10 +94,10 @@ class _LoginPageState extends State<LoginPage> {
           // FormHelper.inputFieldWidget(context, keyName, hintText, onValidate, onSaved)
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
-            child: FormHelper.inputFieldWidget(
-                context, "username", "Username or Email", (onValidateVal) {
+            child: FormHelper.inputFieldWidget(context, "username", "Username",
+                (onValidateVal) {
               if (onValidateVal.isEmpty) {
-                return 'Must input a username or an email';
+                return 'Must input a username';
               }
               return null;
             }, (onSavedVal) {
@@ -137,29 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                         ? Icons.visibility_off
                         : Icons.visibility))),
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 25, top: 10),
-              child: RichText(
-                text: TextSpan(
-                  style: const TextStyle(color: Colors.grey, fontSize: 14.0),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: 'Forget Password ?',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          decoration: TextDecoration.underline,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            print("forgot password");
-                          }),
-                  ],
-                ),
-              ),
-            ),
-          ),
+
           SizedBox(
             height: 20,
           ),
@@ -172,32 +150,24 @@ class _LoginPageState extends State<LoginPage> {
                 LoginRequestModel model =
                     LoginRequestModel(username: username!, password: password!);
                 try {
-                  final loginResponse = await APIService.login(model);
+                  final loginResponse = await UserAPIService.login(model);
                   setState(() {
                     isApicallProcess = false;
                   });
                   if (loginResponse.token != null) {
-                    await SharedService.setLoginResponse(loginResponse);
+                    await UserSharedPrefs.setLoginResponse(loginResponse);
                     Navigator.pushNamedAndRemoveUntil(
-                        context, '/profile', (route) => false);
+                        context, '/home', (route) => false);
                   } else {
-                    FormHelper.showSimpleAlertDialog(
-                        context,
-                        Config.appName,
-                        "Invalid username/password",
-                        "OK",
-                        () => Navigator.pop(context));
+                    DialogHelper.displayDialog(
+                        context, "Invalid username/password");
                   }
                 } catch (e) {
                   setState(() {
                     isApicallProcess = false;
                   });
-                  FormHelper.showSimpleAlertDialog(
-                      context,
-                      Config.appName,
-                      "An error occurred. Please try again.",
-                      "OK",
-                      () => Navigator.pop(context));
+                  DialogHelper.displayDialog(
+                      context, "An error occurred. Please try again.");
                 }
               }
             },
@@ -233,6 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
+                          Navigator.pop(context);
                           Navigator.pushNamed(context, "/register");
                         }),
                 ],

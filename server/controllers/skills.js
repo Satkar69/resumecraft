@@ -5,23 +5,25 @@ import {
   deleteSkillById,
   findSkillById,
   updateSkillById,
+  findSkillsByUd,
+  updateSkillByUd,
 } from "../services/skills.js";
 
 export const createSkill = asyncHandler(async (req, res, next) => {
   const data = req.body;
   const skill = await createSk(data);
-  return res.status(201).json({
+  res.status(201).json({
     status: "success",
-    statuscode: 200,
+    statusCode: 201,
     skill,
   });
 });
 
 export const getSkills = asyncHandler(async (req, res, next) => {
   const skills = await findAllSkill();
-  return res.status(200).json({
+  res.status(200).json({
     status: "success",
-    statuscode: 200,
+    statusCode: 200,
     skills,
   });
 });
@@ -29,7 +31,7 @@ export const getSkills = asyncHandler(async (req, res, next) => {
 export const getSkill = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   const skill = await findSkillById(id);
-  return res.status(200).json({
+  res.status(200).json({
     status: "success",
     statusCode: 200,
     skill,
@@ -38,11 +40,11 @@ export const getSkill = asyncHandler(async (req, res, next) => {
 
 export const deleteSkill = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  const skill = await deleteSkillById(id);
-  return res.status(200).json({
+  deleteSkillById(id);
+  res.status(200).json({
     status: "success",
     statusCode: 200,
-    skill,
+    message: `skill deleted successfully!!`,
   });
 });
 
@@ -50,7 +52,28 @@ export const updateSkill = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   const data = req.body;
   const skill = await updateSkillById(id, data);
-  return res.status(200).json({
+  res.status(200).json({
+    status: "success",
+    statusCode: 200,
+    skill,
+  });
+});
+
+export const getSkillsByUserDetail = asyncHandler(async (req, res, next) => {
+  const id = req.params.id;
+  const skills = await findSkillsByUd(id);
+  res.status(200).json({
+    status: "success",
+    statusCode: 200,
+    skills,
+  });
+});
+
+export const updateSkillByUserDetail = asyncHandler(async (req, res, next) => {
+  const id = req.params.id;
+  const data = req.body;
+  const skill = await updateSkillByUd(id, data);
+  res.status(200).json({
     status: "success",
     statusCode: 200,
     skill,
