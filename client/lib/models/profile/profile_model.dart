@@ -27,8 +27,15 @@ class User {
   String? email;
   String? createdAt;
   String? updatedAt;
+  List<String>? resume;
 
-  User({this.id, this.username, this.email, this.createdAt, this.updatedAt});
+  User(
+      {this.id,
+      this.username,
+      this.email,
+      this.createdAt,
+      this.updatedAt,
+      this.resume});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
@@ -36,6 +43,9 @@ class User {
     email = json['email'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    if (json['resume'] != null) {
+      resume = List<String>.from(json['resume']);
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -45,6 +55,9 @@ class User {
     data['email'] = email;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
+    if (resume != null) {
+      data['resume'] = resume;
+    }
     return data;
   }
 }

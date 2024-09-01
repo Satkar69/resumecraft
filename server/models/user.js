@@ -21,6 +21,10 @@ const user = new Schema({
     type: String,
     required: [true, "password is a required field"],
   },
+  resume: {
+    type: [String],
+    default: [],
+  },
   created_at: {
     type: Date,
     default: Date.now,

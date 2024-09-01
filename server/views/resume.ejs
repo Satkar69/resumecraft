@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= userdetail?.[0]?.fullname ?? 'Resume' %></title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+      }
+      .sidebar {
+        width: 30%;
+        background-color: #1a237e;
+        color: white;
+        padding: 20px;
+      }
+      .main-content {
+        width: 70%;
+        padding: 20px;
+      }
+      .profile-image {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 20px;
+      }
+      h1,
+      h2 {
+        margin-bottom: 10px;
+      }
+      .section {
+        margin-bottom: 30px;
+      }
+      .skill-bar {
+        background-color: #ddd;
+        height: 10px;
+        margin-bottom: 10px;
+      }
+      .skill-level {
+        background-color: #ffd700;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <% if (userdetail?.[0]?.image) { %>
+      <img
+        src="http://localhost:3000/public/images/<%= userdetail[0].image %>"
+        alt="<%= userdetail[0].fullname %>"
+        class="profile-image"
+      />
+      <% } %>
+      <h1><%= userdetail?.[0]?.fullname ?? 'Full Name' %></h1>
+
+      <div class="section">
+        <h2>CONTACT</h2>
+        <p><%= userdetail?.[0]?.email ?? 'Email not provided' %></p>
+        <p><%= userdetail?.[0]?.contact ?? 'Contact not provided' %></p>
+        <p><%= userdetail?.[0]?.address ?? 'Address not provided' %></p>
+        <% if (userdetail?.[0]?.socials?.length > 0) { %>
+        <p class="text-white">
+          <a href="<%= userdetail[0].socials[0] %>"
+            ><%= userdetail[0].socials[0] %></a
+          >
+        </p>
+        <% } %>
+      </div>
+
+      <div class="section">
+        <h2>SKILLS</h2>
+        <% if (skills?.length > 0) { %> <% skills.forEach(skill => { %>
+        <p><%= skill.skill_name %></p>
+        <div class="skill-bar">
+          <div
+            class="skill-level"
+            style="width: <%= skill.skill_percentage %>%"
+          ></div>
+        </div>
+        <% }); %> <% } else { %>
+        <p>No skills provided.</p>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="section">
+        <h2>Objective</h2>
+        <% if (objective?.details) { %>
+        <p><%= objective.details %></p>
+        <% } else { %>
+        <p>No objective provided.</p>
+        <% } %>
+      </div>
+
+      <div class="section">
+        <h2>EXPERIENCE</h2>
+        <% if (experience?.length > 0) { %> <% experience.forEach(exp => { %>
+        <h3><%= exp.job_title %> | <%= exp.company_name %></h3>
+        <p>
+          <%= new Date(exp.start_date).toLocaleDateString('en-US', { year:
+          'numeric', month: 'long' }) %> - <%= exp.end_date ? new
+          Date(exp.end_date).toLocaleDateString('en-US', { year: 'numeric',
+          month: 'long' }) : 'Present' %>
+        </p>
+        <p><%= exp.details %></p>
+        <% }); %> <% } else { %>
+        <p>No experience provided.</p>
+        <% } %>
+      </div>
+
+      <div class="section">
+        <h2>PROJECTS</h2>
+        <% if (projects?.length > 0) { %> <% projects.forEach(project => { %>
+        <h3><%= project.project_title %></h3>
+        <p><%= project.project_desc %></p>
+        <% if (project.links?.length > 0) { %>
+        <p>
+          Link: <a href="<%= project.links[0] %>"><%= project.links[0] %></a>
+        </p>
+        <% } %> <% }); %> <% } else { %>
+        <p>No projects provided.</p>
+        <% } %>
+      </div>
+
+      <div class="section">
+        <h2>EDUCATION</h2>
+        <% if (education?.length > 0) { %> <% education.forEach(edu => { %>
+        <h3><%= edu.course %></h3>
+        <p><%= edu.university %></p>
+        <p>
+          <%= new Date(edu.start_date).toLocaleDateString('en-US', { year:
+          'numeric', month: 'long' }) %> - <%= edu.end_date ? new
+          Date(edu.end_date).toLocaleDateString('en-US', { year: 'numeric',
+          month: 'long' }) : 'Present' %>
+        </p>
+        <p>GPA: <%= edu.gpa %></p>
+        <% }); %> <% } else { %>
+        <p>No education details provided.</p>
+        <% } %>
+      </div>
+    </div>
+  </body>
+</html>

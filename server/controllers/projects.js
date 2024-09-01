@@ -5,23 +5,25 @@ import {
   findProjById,
   deleteProjById,
   updateProjById,
+  findProjsByUd,
+  updateProjByUd,
 } from "../services/projects.js";
 
 export const createProject = asyncHandler(async (req, res, next) => {
   const data = req.body;
   const project = await createProj(data);
-  return res.status(201).json({
+  res.status(201).json({
     status: "success",
-    statuscode: 200,
+    statusCode: 201,
     project,
   });
 });
 
 export const getProjects = asyncHandler(async (req, res, next) => {
   const projects = await findAllProj();
-  return res.status(200).json({
+  res.status(200).json({
     status: "success",
-    statuscode: 200,
+    statusCode: 200,
     projects,
   });
 });
@@ -29,7 +31,7 @@ export const getProjects = asyncHandler(async (req, res, next) => {
 export const getProject = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   const project = await findProjById(id);
-  return res.status(200).json({
+  res.status(200).json({
     status: "success",
     statusCode: 200,
     project,
@@ -38,11 +40,11 @@ export const getProject = asyncHandler(async (req, res, next) => {
 
 export const deleteProject = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  const project = await deleteProjById(id);
-  return res.status(200).json({
+  await deleteProjById(id);
+  res.status(200).json({
     status: "success",
     statusCode: 200,
-    project,
+    message: `project deleted successfully!!`,
   });
 });
 
@@ -50,9 +52,32 @@ export const updateProject = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   const data = req.body;
   const project = await updateProjById(id, data);
-  return res.status(200).json({
+  res.status(200).json({
     status: "success",
     statusCode: 200,
     project,
   });
 });
+
+export const getProjectsByUserDetail = asyncHandler(async (req, res, next) => {
+  const id = req.params.id;
+  const projects = await findProjsByUd(id);
+  res.status(200).json({
+    status: "success",
+    statusCode: 200,
+    projects,
+  });
+});
+
+export const updateProjectByUserDetail = asyncHandler(
+  async (req, res, next) => {
+    const id = req.params.id;
+    const data = req.body;
+    const project = await updateProjByUd(id, data);
+    res.status(200).json({
+      status: "success",
+      statusCode: 200,
+      project,
+    });
+  }
+);

@@ -3,18 +3,18 @@ import { Schema } from "mongoose";
 
 const projects = new Schema({
   userdetail: {
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "userdetail",
   },
   project_title: {
     type: String,
     trim: true,
-    default: "",
+    default: null,
   },
   project_desc: {
     type: String,
     trim: true,
-    default: "",
+    default: null,
   },
   links: {
     type: [String],

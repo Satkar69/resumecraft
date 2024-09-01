@@ -1,13 +1,18 @@
 import 'package:dio/dio.dart';
 
+//====================== api-endpoints ===========================>
 import 'package:resumecraft/config.dart';
+
+//====================== auth ===========================>
 import 'package:resumecraft/models/login/login_request_model.dart';
 import 'package:resumecraft/models/login/login_response_model.dart';
 import 'package:resumecraft/models/register/register_request_model.dart';
 import 'package:resumecraft/models/register/register_response_model.dart';
 
-class APIService {
+class UserAPIService {
   static final Dio _dio = Dio();
+
+//====================== auth ===========================>
 
   static Future<LoginResponseModel> login(
       LoginRequestModel requestModel) async {
@@ -48,4 +53,21 @@ class APIService {
       throw Exception('Failed to get user profile: $e');
     }
   }
+
+  static Future<dynamic> generateResume(
+      String token, String personalDetailID) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.generateResume}$personalDetailID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to generate resume');
+    }
+  }
+
+//====================== auth ===========================>
 }

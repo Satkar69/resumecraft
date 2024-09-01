@@ -1,18 +1,30 @@
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 import CustomError from "../../utils/CustomError.js ";
 
 const maxSize = 3 * 1024 * 1024; // 3MB
 
-const getDestination = (file) => {
-  if (file.mimetype === "application/pdf") {
-    return "public/pdfs";
-  } else if (file.mimetype.startsWith("image/")) {
-    return "public/images";
-  } else {
-    //default to a generic uploads folder or throw an error
-    return "public/uploads";
+const ensureDirectoryExistence = (dirPath) => {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true }); // Creates nested directories if needed
   }
+};
+
+const getDestination = (file) => {
+  let destinationPath;
+  if (file.mimetype === "application/pdf") {
+    destinationPath = "public/pdfs";
+  } else if (file.mimetype.startsWith("image/")) {
+    destinationPath = "public/images";
+  } else {
+    destinationPath = "public/uploads";
+  }
+
+  // Ensure the directory exists
+  ensureDirectoryExistence(destinationPath);
+
+  return destinationPath;
 };
 
 const storage = multer.diskStorage({
@@ -22,7 +34,8 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const ext = path.extname(file.originalname);
-    cb(null, `${file.originalname}-${Date.now()}` + ext);
+    const name = path.basename(file.originalname, ext);
+    cb(null, `${name}${ext}`);
   },
 });
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:resumecraft/models/login/login_response_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SharedService {
+class UserSharedPrefs {
   static const String KEY_LOGIN_RESPONSE = "login_response";
 
   static Future<bool> setLoginResponse(LoginResponseModel loginResponse) async {

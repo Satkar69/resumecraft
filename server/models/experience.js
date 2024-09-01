@@ -3,18 +3,18 @@ import { Schema } from "mongoose";
 
 const experience = new Schema({
   userdetail: {
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "userdetail",
   },
   company_name: {
     type: String,
     trim: true,
-    default: "",
+    default: null,
   },
   job_title: {
     type: String,
     trim: true,
-    default: "",
+    default: null,
   },
   start_date: {
     type: Date,
@@ -26,7 +26,7 @@ const experience = new Schema({
   },
   details: {
     type: String,
-    default: "",
+    default: null,
   },
 });
 

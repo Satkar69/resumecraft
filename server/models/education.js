@@ -3,23 +3,23 @@ import { Schema } from "mongoose";
 
 const education = new Schema({
   userdetail: {
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "userdetail",
   },
   course: {
     type: String,
     trim: true,
-    default: "",
+    default: null,
   },
   university: {
     type: String,
     trim: true,
-    default: "",
+    default: null,
   },
   gpa: {
     type: String,
     trim: true,
-    default: "",
+    default: null,
   },
   start_date: {
     type: Date,

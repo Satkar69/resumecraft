@@ -2,8 +2,10 @@ import { Router } from "express";
 import {
   createUserDetail,
   deleteUserDetail,
+  getResumeInfo,
   getUserDetail,
   getUserDetails,
+  getUserDetailsByCurrentUser,
   updateUserDetail,
   uploadImage,
 } from "../controllers/userdetail.js";
@@ -15,6 +17,7 @@ const router = Router();
 
 router.route("/").get(getUserDetails);
 router.route("/create-userdetail").post(createUserDetail);
+router.route("/userdetails-by-currentuser").get(getUserDetailsByCurrentUser);
 
 router
   .route("/:id")
@@ -33,5 +36,7 @@ router.route("/upload-image").post(upload, (req, res, next) => {
     }
   }
 });
+
+router.route("/generate-resume/:id").get(getResumeInfo);
 
 export default router;
